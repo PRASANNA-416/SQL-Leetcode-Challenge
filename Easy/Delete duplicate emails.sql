@@ -19,11 +19,7 @@
 -- +----+------------------+
 
 -- Solution
-With t1 as
-(
- Select *,
-    row_number() over(partition by email order by id) as rk
-    from person
-)
-Delete from person
-where id in (Select t1.id from t1 where t1.rk>1)
+DELETE t1
+FROM Person t1
+JOIN Person t2
+  ON t1.email = t2.email AND t1.id > t2.id;
