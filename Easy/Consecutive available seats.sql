@@ -23,11 +23,10 @@
 -- Consecutive available seats are more than 2(inclusive) seats consecutively available.
 
 -- Solution
-Select seat_id
-from(
-select seat_id, free,
-lead(free,1) over() as next,
-lag(free,1) over() as prev
-from cinema) a
-where a.free=True and (next = True or prev=True)
-order by seat_id
+select
+   distinct c1.seat_id
+from cinema as c1
+inner join cinema as c2
+on (c1.seat_id = c2.seat_id + 1) or (c1.seat_id = c2.seat_id - 1)
+where c1.free = 1 and c2.free =  c1.free
+order by c1.seat_id asc
