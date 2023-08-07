@@ -43,11 +43,10 @@
 -- "Cinderella" was not streamed in June 2020.
 
 -- Solution
-select distinct title
-from
-(select content_id, title
-from content
-where kids_content = 'Y' and content_type = 'Movies') a
-join
-tvprogram using (content_id)
-where month(program_date) = 6
+SELECT DISTINCT c.title
+FROM TVProgram t
+LEFT JOIN Content c
+ON t.content_id = c.content_id
+WHERE DATE_FORMAT(t.program_date, '%Y-%M') = '2020-06'
+AND c.Kids_content = 'Y'
+AND c.content_type = 'Movies
