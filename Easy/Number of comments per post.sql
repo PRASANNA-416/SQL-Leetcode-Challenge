@@ -70,6 +70,6 @@ comments AS
 
 SELECT sub_id AS post_id, CASE WHEN Num IS NOT NULL THEN Num ELSE 0 END AS number_of_comments
 FROM posts
-LEFT JOIN com
-ON posts.sub_id = com.parent_id
+LEFT JOIN comments
+ON posts.sub_id = comments.parent_id
 ORDER BY post_id
