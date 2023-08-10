@@ -57,13 +57,19 @@
 -- The comment with id 6 is a comment on a deleted post with id 7 so we ignored it.
 
 -- Solution
-Select a.sub_id as post_id, coalesce(b.number_of_comments,0) as number_of_comments
-from(
-select distinct sub_id from submissions where parent_id is null) a
-left join(
-select parent_id, count(distinct(sub_id)) as number_of_comments
-from submissions
-group by parent_id
-having parent_id = any(select sub_id from submissions where parent_id is null)) b
-on a.sub_id = b.parent_id
-order by post_id
+WITH posts AS
+(SELECT DISTINCT sub_id
+ FROM submissions
+ WHERE parent_id IS NULL),
+
+comments AS
+(SELECT parent_id, COUNT(DISTINCT sub_id) AS Num
+ FROM submissions
+ WHERE parent_id IS NOT NULL
+ GROUP BY parent_id)
+
+SELECT sub_id AS post_id, CASE WHEN Num IS NOT NULL THEN Num ELSE 0 END AS number_of_comments
+FROM posts
+LEFT JOIN com
+ON posts.sub_id = com.parent_id
+ORDER BY post_id
