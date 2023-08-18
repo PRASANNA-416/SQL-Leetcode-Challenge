@@ -49,9 +49,6 @@
 
 
 -- Solution
-select ifnull(round(avg(a.num),2),0) as average_sessions_per_user
-from (
-select count(distinct session_id) as num
-from activity
-where activity_date between '2019-06-28' and '2019-07-27'
-group by user_id) a
+SELECT IFNULL(ROUND(COUNT(DISTINCT session_id)/COUNT(DISTINCT user_id),2),0.00) AS average_sessions_per_user
+FROM Acitvity
+WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'
