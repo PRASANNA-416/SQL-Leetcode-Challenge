@@ -84,13 +84,10 @@
 -- so we don't include it in the result table. 
 
 -- Solution
-Select c.country_name, 
-case when avg(w.weather_state)<=15 then 'Cold'
-     when avg(w.weather_state)>=25 then 'Hot'
-else 'Warm'
-end as weather_type
-from weather w join
-countries c
-on w.country_id = c.country_id
-where month(day) = 11
-group by c.country_name
+SELECT c.country_name, CASE WHEN AVG(w.weather_state) <= 15 THEN 'Cold' WHEN AVG(w.weather_state) >= 25 THEN 'Hot' ELSE WARM END AS weather_type
+FROM Weather W
+LEFT JOIN Countries c
+ON w.country_id = c.country_id
+WHERE MONTH(day) = 11
+AND YEAR(day) = 2019
+GROUP BY c.country_name
