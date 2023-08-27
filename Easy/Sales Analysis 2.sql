@@ -57,11 +57,13 @@
 -- The buyer with id 1 bought an S8 but didn't buy an iPhone. The buyer with id 3 bought both.
 
 -- Solution
-Select distinct a.buyer_id
-from sales a join
-product b
-on a.product_id = b.product_id
-where a.buyer_id in
-(Select a.buyer_id from sales a join product b on a.product_id = b.product_id where b.product_name = 'S8') 
-and
-a.buyer_id not in (Select a.buyer_id from sales a join product b on a.product_id = b.product_id where b.product_name = 'iPhone')
+WITH CTE AS
+(SELECT s.*, p.product_name
+ FROM Sales s
+ LEFT JOIN Product p
+ON s.product_id = p.product_id)
+
+SELECT DISTINCT buyer_id
+FROM CTE
+WHERE product_name = 'S8'
+AND buyer_id NOT IN (SELECT DISTINCT buyer_id FROM CTE WHERE  product_name = 'iPhone')
