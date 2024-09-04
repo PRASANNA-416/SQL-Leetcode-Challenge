@@ -51,3 +51,20 @@ on e.event_type = b.event) c
 where c.occurences>c.average
 group by c.business_id
 having count(*) > 1
+
+
+
+
+WITH average_values AS (
+    SELECT event_type, AVG(occurences) AS average_count
+    FROM events
+    GROUP BY event_type
+)
+SELECT business_id
+FROM events
+JOIN average_values
+ON events.event_type = average_values.event_type
+WHERE events.occurences > average_values.average_count
+GROUP BY business_id
+HAVING COUNT(DISTINCT events.event_type) > 1;
+
